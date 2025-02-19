@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@langchain/community": "^0.3.31",
+    "@langchain/ollama": "^0.2.0",
     "@langchain/openai": "^0.4.4",
     "@playwright/test": "^1.50.1",
     "dotenv": "^16.4.7",

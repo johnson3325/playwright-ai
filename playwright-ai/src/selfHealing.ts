@@ -1,13 +1,35 @@
 import { Page } from "playwright";
 import { ChatOpenAI } from "@langchain/openai";
+import { Ollama } from "@langchain/community/llms/ollama";
 import dotenv from "dotenv";
+import { ChatOllama } from "@langchain/ollama";
 
 dotenv.config();
 
-const openai = new ChatOpenAI({
-  modelName: "gpt-4-turbo",
-  openAIApiKey: process.env.OPENAI_API_KEY,
-});
+// Read AI provider from environment variables, default to Ollama
+const aiProvider = process.env.AI_PROVIDER || "ollama"; // Default: Local AI (Ollama)
+let aiModel: ChatOpenAI | ChatOllama;
+
+if (aiProvider === "openai") {
+    console.log("🔹 Using OpenAI (GPT-4-Turbo)");
+    aiModel = new ChatOpenAI({
+        modelName: "gpt-4-turbo",
+        openAIApiKey: process.env.OPENAI_API_KEY,
+    });
+} else if (aiProvider === "mistral") {
+    console.log("🔹 Using Mistral AI (Cloud API)");
+    aiModel = new ChatOpenAI({
+        modelName: "mistral-tiny",
+        openAIApiKey: process.env.MISTRAL_API_KEY,
+    });
+} else if (aiProvider === "ollama") {
+    console.log("🔹 Using Ollama (Local AI)");
+    aiModel = new ChatOllama({
+        model: process.env.OLLAMA_MODEL || "mistral",
+    });
+} else {
+    throw new Error("❌ Invalid AI_PROVIDER. Use 'openai', 'mistral', or 'ollama'.");
+}
 
 /**
  * AI-powered self-healing locator.
@@ -38,7 +60,7 @@ export async function selfHealingLocator(page: Page, selector: string) {
         `;
 
         // AI suggests a new selector using LangChain's invoke() method
-        const response = await openai.invoke([
+        const response = await aiModel.invoke([
             { role: "system", content: "You are an AI that suggests the best alternative selectors for broken locators in web automation tests." },
             { role: "user", content: prompt }
         ]);
