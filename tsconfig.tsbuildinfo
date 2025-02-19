@@ -1,0 +1,1 @@
+{"root":["./playwright-ai/src/erroranalysis.ts","./playwright-ai/src/index.ts","./playwright-ai/src/selfhealing.ts","./playwright-ai/src/testgeneration.ts","./playwright-ai/src/testselection.ts","./playwright-ai/src/visualtesting.ts"],"errors":true,"version":"5.7.3"}
