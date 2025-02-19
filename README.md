@@ -74,10 +74,10 @@ export default defineConfig({
 ## 🛠 Roadmap
 - [x] Self-Healing Locators
 - [x] Multi-Model AI Support
-- [ ] AI-Powered Test Generation
-- [ ] AI-Based Smart Test Selection
-- [ ] AI-Powered Error Analysis
-- [ ] Enhanced Reporting
+- 🔜 AI-Powered Test Generation
+- 🔜 AI-Based Smart Test Selection
+- 🔜 AI-Powered Error Analysis
+- 🔜 Enhanced Reporting
 
 ## 🤝 Contributing
 We welcome contributions! Feel free to fork the repository and submit a pull request.
