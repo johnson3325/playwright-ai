@@ -1,16 +1,25 @@
 {
-  "name": "playwright-ai",
+  "name": "playwright-ai-tools",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "An AI-powered Playwright automation framework using LangChain",
+  "main": "dist/index.js",
+  "types": "dist/index.ds.ts",
   "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "playwright",
+    "AI",
+    "LangChain",
+    "test automation"
+  ],
+  "author": "JE",
+  "license": "MIT",
   "dependencies": {
     "@langchain/community": "^0.3.31",
+    "@langchain/mistralai": "^0.2.0",
     "@langchain/ollama": "^0.2.0",
     "@langchain/openai": "^0.4.4",
     "@playwright/test": "^1.50.1",

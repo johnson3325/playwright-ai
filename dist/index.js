@@ -17,10 +17,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateAndSaveTest = exports.selfHealingLocator = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-__exportStar(require("./selfHealing"), exports);
-__exportStar(require("./testGeneration"), exports);
+const selfHealing_1 = __importDefault(require("./selfHealing"));
+exports.selfHealingLocator = selfHealing_1.default;
+const testGeneration_1 = __importDefault(require("./testGeneration"));
+exports.generateAndSaveTest = testGeneration_1.default;
 __exportStar(require("./testSelection"), exports);
 __exportStar(require("./errorAnalysis"), exports);
 __exportStar(require("./visualTesting"), exports);

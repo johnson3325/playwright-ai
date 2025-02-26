@@ -41,7 +41,7 @@ Choose your AI provider by setting the `AI_PROVIDER` environment variable:
 Example `.env`:
 ```typescript
 AI_PROVIDER=ollama
-OLLAMA_MODEL=mistral
+OLLAMA_MODEL=llama3
 ```
 
 ## 🎯 Usage
