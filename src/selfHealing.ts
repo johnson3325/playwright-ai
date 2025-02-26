@@ -33,19 +33,7 @@ if (aiProvider === "openai") {
 } else {
     throw new Error("❌ Invalid AI_PROVIDER. Use 'openai', 'mistral', or 'ollama'.");
 }
-/**
- * Extracts only the CSS selector from an AI response.
- */
-function extractCssSelector(aiResponse: string): string {
-    // Match CSS selectors inside triple backticks or inline backticks
-    const match = aiResponse.match(/```css\s*([\s\S]+?)\s*```|`([^`]+)`/);
-    
-    if (match) {
-        return match[1] || match[2] || ''; // Extract selector
-    }
-    
-    throw new Error("❌ No valid CSS selector found in AI response.");
-}
+
 /**
  * AI-powered self-healing locator.
  * If a selector is broken, the AI suggests an alternative.
@@ -69,11 +57,14 @@ export async function selfHealingLocator(page: Page, selector: string) {
                 // class: await el.evaluate((node) => node.className.split(" ").slice(0, 2).join(" ")), // ✅ Limit to 2 class names
             }))
         );
+        console.log("✅ Extracted element data:", elementData);
 
         // Construct AI prompt
-        const prompt = `The selector "${selector}" is broken. Based on the following elements:
-        ${JSON.stringify(elementData.slice(0, 5), null, 2)}  // Send only 5 elements for faster processing
-        Return ONLY the best alternative selector. No explanations.`;
+        const prompt = `The selector \"${selector}\" is broken. 
+        Return ONLY the best alternative selector that can be used as a locator in the Playwright test. No explanations, no extra words, just the raw selector.`;
+        //     const prompt = `The selector \"${selector}\" is broken. Based on the following elements:
+        // ${JSON.stringify(elementData.slice(0, 5), null, 2)}
+        // Return ONLY the best alternative CSS selector. No explanations, no extra words, just the raw selector.`;
 
         // AI suggests a new selector using LangChain's invoke() method
         const response = await aiModel.invoke([
@@ -81,9 +72,14 @@ export async function selfHealingLocator(page: Page, selector: string) {
             { role: "user", content: prompt }
         ]);
 
-        const newSelector = typeof response.content === 'string' ? response.content.trim() : null;
-        console.log(`✅ AI Suggested Selector: ${newSelector}`);
+        console.log(`✅ AI Raw Response: ${response.content}`);
+        let newSelector = typeof response.content === 'string' ? response.content.trim() : null;
+        if (!newSelector) {
+            console.warn("⚠️ AI failed. Using fallback heuristic.");
+            newSelector = elements.length > 0 ? await elements[0].evaluate(el => el.tagName.toLowerCase()) : null;
+        }
 
+        console.log(`✅ AI Suggested Selector: ${newSelector}`);
         return newSelector ? await page.$(newSelector) : null;
     } catch (error) {
         console.error("❌ Self-healing failed:", error);
